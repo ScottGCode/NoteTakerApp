@@ -7,9 +7,13 @@ const app = express();
 // Define the port
 const PORT = process.env.PORT || 3001; 
 
-// Set up routes using express 
-require('./routes/html.js')(app);
-require('./routes/notes.js')(app);
+// Import local modules 
+const htmlRoute = require('./routes/html.js')(app);
+const noteRoute = require('./routes/notes.js')(app);
+
+// Invoke the route modules, passing the 'app' object
+htmlRoute(app);
+noteRoute(app); 
 
 // Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
