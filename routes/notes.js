@@ -5,11 +5,11 @@ const express = require('express');
 const uniqid = require('uniqid');
 
 const app = express();
-
 app.use(express.json());
 
 module.exports = (app) => {
 
+    // GET route 
     app.get('/notes', (req, res) => {
         res.sendFile(path.join(__dirname, '../db/db.json'), 'utf8', (err, data) => {
             if (err) {
@@ -20,7 +20,7 @@ module.exports = (app) => {
             res.json(db); 
         });
     });
-
+    // POST route 
     app.post('/notes', (req, res) => {
         if(!req.body){
             return res.status(400).json({ error: 'Request body missing or not JSON'});
@@ -28,25 +28,23 @@ module.exports = (app) => {
         let db = fs.readFileSync('db/db.json');
         db = JSON.parse(db);
 
-        // creating body for note
+    // Create body for note 
         let userNote = {
             title: req.body.title,
             text: req.body.text,
-            // creating unique id for each note
+    // Create unique id for each note.
             id: uniqid(),
         };
 
-        // pushing created note to be written in the db.json file
+    // Push created note to be written in the db.json file
         db.push(userNote);
 
             
-            // Write the updated db array back to db.json
+    // Write the updated db array back to db.json
             fs.writeFileSync('db/db.json', JSON.stringify(db));
         
-        // Send the response with the updated db array
-            //res.json(db);
-            res.status(204).send();
-        console.log(res);
+    // Send the response with the updated db array
+            res.json(db);
 
     });
 };
